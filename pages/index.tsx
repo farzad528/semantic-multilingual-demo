@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,10 +14,30 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1 className="text-4xl max-w-2xl font-bold text-slate-900">
-          Semantic Search Multilingual Demo
-        </h1>
+      <Header />
+      <main className="bg-[#F5F5F5] h-screen">
+        <div className="flex w-full justify-center items-center bg-[#444791]">
+          <div className="flex items-center bg-white w-2/3 rounded-md my-2 px-2">
+            <Image
+              alt="search icon"
+              src="/searchIcon.svg"
+              width={30}
+              height={30}
+            />
+            <input
+              className="py-2 px-1 bg-[#FFFFFFCC] text-center"
+              placeholder={"Type a search query"}
+            />
+          </div>
+        </div>
+
+        <div className="flex w-screen px-3">
+          <div className="flex-auto w-1/4 border-4 bg-red-400">
+            <div>filters pane</div>
+          </div>
+          <div className="flex-auto w-3/4 border-rose">search results</div>
+          {/* Search Results */}
+        </div>
       </main>
     </>
   );
