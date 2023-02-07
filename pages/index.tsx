@@ -2,14 +2,46 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Header from "@/components/Header";
-import React from "react";
+import React, { useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
+import { BeatLoader } from "react-spinners";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<String>("");
+  // const [searchResultsCount, setSearchResultsCount] = useState(0);
+
+  const query = searchTerm;
+
+  const getSearchResults = async (e: any) => {
+    e.preventDefault();
+    setSearchResults("");
+    setLoading(true);
+
+    const response = await fetch("/api/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": `${process.env.API_KEY ?? ""}`,
+      },
+      body: JSON.stringify({
+        query,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    let semanticAnswer = await response.json();
+    console.log(semanticAnswer);
+    setLoading(false);
+  };
   return (
     <>
       <Head>
@@ -22,27 +54,34 @@ export default function Home() {
       <main className="bg-[#F5F5F5] h-screen">
         <div className="flex w-full justify-center items-center bg-[#444791]">
           <div className="flex items-center bg-white w-2/3 rounded-md my-2 px-2">
-            {/* <Image
-              alt="search icon"
-              src="/searchIcon.svg"
-              width={30}
-              height={30}
-            /> */}
             <MagnifyingGlassIcon width={20} className="text-gray-500" />
             <input
               className="py-2 px-1 bg-[#FFFFFFCC] text-center"
               placeholder={"Type a search query"}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
-
         <div className="flex w-screen px-3">
-          <div className="flex-auto w-1/4 border-4 bg-red-400">
-            <div>filters pane</div>
+          <div className="flex-auto w-1/4 pt-4 px-2 bg-white">
+            <div className="bg-white pl-4">
+              <p>Filters</p>
+            </div>
           </div>
-          <div className="flex-auto w-3/4 border-rose">
+          <div className="flex-auto w-3/4 bg-sky-400 pt-4 px-2">
             <div>
               <p>Showing 1-10 results</p>
+              {!loading && (
+                <button
+                  className="bg-black"
+                  onClick={(e) => getSearchResults(e)}
+                >
+                  search lets go
+                </button>
+              )}
+              {/* <div>{searchResults}</div> */}
+              <BeatLoader color="#444791" />
             </div>
           </div>
           {/* Search Results */}
