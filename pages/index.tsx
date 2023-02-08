@@ -10,18 +10,26 @@ import { BeatLoader } from "react-spinners";
 
 const inter = Inter({ subsets: ["latin"] });
 
+interface SearchResult {
+  "@search.score": number;
+  id: string;
+  title_en: string;
+  content_en: string;
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<String>("");
-  // const [searchResultsCount, setSearchResultsCount] = useState(0);
+  const [searchResults, setSearchResults] = useState([]);
 
   const query = searchTerm;
 
   const getSearchResults = async (e: any) => {
     e.preventDefault();
-    setSearchResults("");
+    setSearchResults([]);
     setLoading(true);
+    setCount(0);
 
     const response = await fetch("/api/search", {
       method: "POST",
@@ -38,9 +46,11 @@ export default function Home() {
       throw new Error(response.statusText);
     }
 
-    let semanticAnswer = await response.json();
-    console.log(semanticAnswer);
+    let results = await response.json();
+    console.log(results.value);
     setLoading(false);
+    setCount(results["@odata.count"]);
+    setSearchResults(results.value);
   };
   return (
     <>
@@ -71,20 +81,27 @@ export default function Home() {
           </div>
           <div className="flex-auto w-3/4 bg-sky-400 pt-4 px-2">
             <div>
-              <p>Showing 1-10 results</p>
+              <p>Showing {count} results</p>
               {!loading && (
                 <button
                   className="bg-black"
                   onClick={(e) => getSearchResults(e)}
                 >
-                  search lets go
+                  click me
                 </button>
               )}
-              {/* <div>{searchResults}</div> */}
-              <BeatLoader color="#444791" />
+              {loading && <BeatLoader color="#444791" />}
+            </div>
+            <div className="bg-sky-500">
+              {searchResults.map((searchResult: SearchResult) => {
+                return (
+                  <div key={searchResult.id}>
+                    <p>{searchResult.title_en}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          {/* Search Results */}
         </div>
       </main>
     </>
