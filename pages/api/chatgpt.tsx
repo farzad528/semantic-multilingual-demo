@@ -10,13 +10,16 @@ export default async function handler(
 ) {
   const { prompt } = req.body;
 
+  if (!prompt) {
+    return new Response("No prompt in the request", { status: 400 });
+  }
+
   const payload = {
     prompt,
     temperature: 0.7,
     frequency_penalty: 0,
     presence_penalty: 0,
     max_tokens: 2000,
-
   };
 
   const response = await fetch(

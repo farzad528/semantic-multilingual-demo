@@ -24,12 +24,19 @@ interface SearchResult {
   title_en: string;
   content_en: string;
 }
+interface SearchResultAnswer {
+  key: number;
+  text: string;
+  highlights: string;
+  score: number;
+}
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsAnswers, setSearchResultsAnswers] = useState([]);
   const [language, setLanguage] = useState<LanguageType>("en-us");
 
   const search = searchTerm;
@@ -58,10 +65,10 @@ export default function Home() {
     }
 
     let results = await response.json();
-    console.log(results.value);
     setLoading(false);
     setCount(results["@odata.count"]);
     setSearchResults(results.value);
+    setSearchResultsAnswers(results["@search.answers"]);
   };
   const handleKeyDown = (e: any) => {
     if (e.keyCode === 13) {
@@ -82,7 +89,7 @@ export default function Home() {
           <div className="flex items-center bg-white w-2/3 rounded-md my-2 px-2">
             <MagnifyingGlassIcon width={20} className="text-gray-500" />
             <input
-              className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0 w-full"
+              className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0 w-full hover:bg-gray-50 "
               placeholder={"Type a search query"}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -95,13 +102,17 @@ export default function Home() {
           />
         </div>
         <div className="flex w-screen px-3">
-          <div className="flex-auto w-1/4 pt-4 px-2 bg-white">
+          <div className="flex-auto w-1/3 pt-4 px-2 bg-gray-400">
             <div className="bg-white pl-4 flex flex-col">
               <p>Ask ChatGPT</p>
-              <div className="bg-purple-500">placeholder for prompt</div>
+              <div className="">
+                <textarea rows={4} placeholder="Ask your question then place your content from your Top Retrieved Document" className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0 w-full">
+                  
+                </textarea>
+              </div>
             </div>
           </div>
-          <div className="flex-auto w-3/4 pt-4 px-4 bg-sky-300">
+          <div className="flex-auto w-2/3 pt-4 px-4 bg-sky-300">
             <div>
               <p>Showing {count} results</p>
               {/* {!loading && (
@@ -116,8 +127,27 @@ export default function Home() {
                 <BeatLoader color="#444791" className="flex items-center" />
               )}
             </div>
-
-            <div className="">
+            <div className="bg-white my-2 shadow-xl rounded-xl">
+              <div>
+                {searchResultsAnswers.map(
+                  (searchResultAnswer: SearchResultAnswer) => {
+                    return (
+                      <div
+                        key={searchResultAnswer.key}
+                        className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl"
+                      >
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: searchResultAnswer.highlights,
+                          }}
+                        />
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+            <div>
               {searchResults.map((searchResult: SearchResult) => {
                 return (
                   <div

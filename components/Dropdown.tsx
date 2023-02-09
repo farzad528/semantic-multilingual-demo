@@ -6,7 +6,10 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
-import classNames from "classnames";
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export type LanguageType = "en-us" | "es-es" | "de-de";
 
