@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import React, { useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { LightBulbIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { BeatLoader } from "react-spinners";
 import Dropdown, { LanguageType } from "@/components/Dropdown";
@@ -101,40 +102,24 @@ export default function Home() {
             setLanguage={(newLanguage) => setLanguage(newLanguage)}
           />
         </div>
-        <div className="flex w-screen px-3">
-          <div className="flex-auto w-1/3 pt-4 px-2 bg-gray-400">
-            <div className="bg-white pl-4 flex flex-col">
-              <p>Ask ChatGPT</p>
-              <div className="">
-                <textarea rows={4} placeholder="Ask your question then place your content from your Top Retrieved Document" className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0 w-full">
-                  
-                </textarea>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-2/3 pt-4 px-4 bg-sky-300">
+        <div className="flex mx-4">
+          <div className="flex-auto pt-4 px-4">
             <div>
               <p>Showing {count} results</p>
-              {/* {!loading && (
-                <button
-                  className="bg-rose-300"
-                  onClick={(e) => getSearchResults(e)}
-                >
-                  click me for results!
-                </button>
-              )} */}
-              {loading && (
-                <BeatLoader color="#444791" className="flex items-center" />
-              )}
+              <span className="flex items-center justify-center">
+                {loading && <BeatLoader color="#444791" />}
+              </span>
             </div>
             <div className="bg-white my-2 shadow-xl rounded-xl">
-              <div>
+              <div className="flex border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl">
+                {/* {!loading && <LightBulbIcon width={40} color="#4F52B2" />} */}
+
                 {searchResultsAnswers.map(
                   (searchResultAnswer: SearchResultAnswer) => {
                     return (
                       <div
                         key={searchResultAnswer.key}
-                        className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl"
+                        className="flex flex-col items-start justify-center w-full pl-2"
                       >
                         <p
                           dangerouslySetInnerHTML={{
