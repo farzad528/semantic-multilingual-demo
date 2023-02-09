@@ -13,12 +13,16 @@ export default async function handler(
   const payload = {
     search,
     queryType: "semantic",
+    // speller: "lexicon",
     queryLanguage: "en-us",
     captions: "extractive",
     answers: "extractive",
     semanticConfiguration: "config_en",
     select: "id, title_en, content_en",
     count: "true",
+    highlightPreTag: "<b>",
+    highlightPostTag: "</b>",
+    top: 5
   };
 
   const response = await fetch(

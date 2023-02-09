@@ -10,8 +10,15 @@ import { BeatLoader } from "react-spinners";
 
 const inter = Inter({ subsets: ["latin"] });
 
+interface SearchCaptions {
+  text: string;
+  highlights: string;
+}
+
 interface SearchResult {
   "@search.score": number;
+  "@search.rerankerScore": number;
+  "@search.captions": SearchCaptions[];
   id: string;
   title_en: string;
   content_en: string;
@@ -23,7 +30,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const query = searchTerm;
+  const search = searchTerm;
 
   const getSearchResults = async (e: any) => {
     e.preventDefault();
@@ -38,7 +45,7 @@ export default function Home() {
         "api-key": `${process.env.API_KEY ?? ""}`,
       },
       body: JSON.stringify({
-        query,
+        search,
       }),
     });
 
@@ -51,6 +58,11 @@ export default function Home() {
     setLoading(false);
     setCount(results["@odata.count"]);
     setSearchResults(results.value);
+  };
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13) {
+      getSearchResults(e);
+    }
   };
   return (
     <>
@@ -66,10 +78,11 @@ export default function Home() {
           <div className="flex items-center bg-white w-2/3 rounded-md my-2 px-2">
             <MagnifyingGlassIcon width={20} className="text-gray-500" />
             <input
-              className="py-2 px-1 bg-[#FFFFFFCC] text-center"
+              className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0"
               placeholder={"Type a search query"}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </div>
@@ -84,10 +97,10 @@ export default function Home() {
               <p>Showing {count} results</p>
               {!loading && (
                 <button
-                  className="bg-black"
+                  className="bg-rose-300"
                   onClick={(e) => getSearchResults(e)}
                 >
-                  click me
+                  click me for results!
                 </button>
               )}
               {loading && <BeatLoader color="#444791" />}
@@ -97,6 +110,17 @@ export default function Home() {
                 return (
                   <div key={searchResult.id}>
                     <p>{searchResult.title_en}</p>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          searchResult["@search.captions"] &&
+                          searchResult["@search.captions"].length
+                            ? searchResult["@search.captions"][0].highlights
+                              ? searchResult["@search.captions"][0].highlights
+                              : "No highlights available"
+                            : "No captions available",
+                      }}
+                    />
                   </div>
                 );
               })}
