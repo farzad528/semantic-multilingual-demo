@@ -7,6 +7,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 import { BeatLoader } from "react-spinners";
+import Dropdown, { LanguageType } from "@/components/Dropdown";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,8 +30,10 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [language, setLanguage] = useState<LanguageType>("en-us");
 
   const search = searchTerm;
+  const queryLanguage = language;
 
   const getSearchResults = async (e: any) => {
     e.preventDefault();
@@ -46,6 +49,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         search,
+        queryLanguage,
       }),
     });
 
@@ -85,6 +89,10 @@ export default function Home() {
               onKeyDown={handleKeyDown}
             />
           </div>
+          <Dropdown
+            language={language}
+            setLanguage={(newLanguage) => setLanguage(newLanguage)}
+          />
         </div>
         <div className="flex w-screen px-3">
           <div className="flex-auto w-1/4 pt-4 px-2 bg-white">
@@ -108,12 +116,13 @@ export default function Home() {
                 <BeatLoader color="#444791" className="flex items-center" />
               )}
             </div>
+
             <div className="">
               {searchResults.map((searchResult: SearchResult) => {
                 return (
                   <div
                     key={searchResult.id}
-                    className=" flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
+                    className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
                   >
                     <p className="text-[#4F52B2] hover:underline hover:cursor-pointer text-lg">
                       {searchResult.title_en}
