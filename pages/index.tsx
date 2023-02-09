@@ -78,7 +78,7 @@ export default function Home() {
           <div className="flex items-center bg-white w-2/3 rounded-md my-2 px-2">
             <MagnifyingGlassIcon width={20} className="text-gray-500" />
             <input
-              className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0"
+              className="py-2 px-1 bg-[#FFFFFFCC] focus:outline-0 w-full"
               placeholder={"Type a search query"}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -88,39 +88,44 @@ export default function Home() {
         </div>
         <div className="flex w-screen px-3">
           <div className="flex-auto w-1/4 pt-4 px-2 bg-white">
-            <div className="bg-white pl-4">
-              <p>Filters</p>
+            <div className="bg-white pl-4 flex flex-col">
+              <p>Ask ChatGPT</p>
+              <div className="bg-purple-500">placeholder for prompt</div>
             </div>
           </div>
-          <div className="flex-auto w-3/4 bg-sky-400 pt-4 px-2">
+          <div className="flex-auto w-3/4 pt-4 px-4 bg-sky-300">
             <div>
               <p>Showing {count} results</p>
-              {!loading && (
+              {/* {!loading && (
                 <button
                   className="bg-rose-300"
                   onClick={(e) => getSearchResults(e)}
                 >
                   click me for results!
                 </button>
+              )} */}
+              {loading && (
+                <BeatLoader color="#444791" className="flex items-center" />
               )}
-              {loading && <BeatLoader color="#444791" />}
             </div>
-            <div className="bg-sky-500">
+            <div className="">
               {searchResults.map((searchResult: SearchResult) => {
                 return (
-                  <div key={searchResult.id}>
-                    <p>{searchResult.title_en}</p>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          searchResult["@search.captions"] &&
-                          searchResult["@search.captions"].length
-                            ? searchResult["@search.captions"][0].highlights
-                              ? searchResult["@search.captions"][0].highlights
-                              : "No highlights available"
-                            : "No captions available",
-                      }}
-                    />
+                  <div
+                    key={searchResult.id}
+                    className=" flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
+                  >
+                    <p className="text-[#4F52B2] hover:underline hover:cursor-pointer text-lg">
+                      {searchResult.title_en}
+                    </p>
+                    <span className="text-sm">
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            searchResult["@search.captions"][0].highlights,
+                        }}
+                      />
+                    </span>
                   </div>
                 );
               })}

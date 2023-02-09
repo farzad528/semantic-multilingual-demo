@@ -22,7 +22,6 @@ export default async function handler(
     count: "true",
     highlightPreTag: "<b>",
     highlightPostTag: "</b>",
-    top: 5
   };
 
   const response = await fetch(
