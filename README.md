@@ -4,7 +4,7 @@
 
 This is a repository built with NextJS that provides a user-friendly interface for querying a multilingual index with semantic search. The goal of this project is to make it easier for users to find the information they need, no matter what language they speak or what type of search they perform.
 
-You can find a live demo [here](https://semantic-search-demo-web.azurewebsites.net/)
+You can find a live demo [here](https://semantic-multilingual-demo.vercel.app/)
 
 ## Features
 
