@@ -110,9 +110,11 @@ export default function Home() {
         <div className="flex mx-4">
           <div className="flex-auto pt-4 px-4">
             <div>
-              <p>
-                Showing {count} {count === 1 ? "result" : "results"}
-              </p>
+              {searchResults.length > 0 && (
+                <p>
+                  Showing {count} {count === 1 ? "result" : "results"}
+                </p>
+              )}
             </div>
             <span className="flex items-center justify-center">
               {loading && <BeatLoader color="#444791" />}
