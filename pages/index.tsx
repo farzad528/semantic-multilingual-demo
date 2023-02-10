@@ -76,11 +76,16 @@ export default function Home() {
     setSearchResults(results.value);
     setSearchResultsAnswers(results["@search.answers"]);
   };
-  const handleKeyDown = (e: any) => {
-    if (e.keyCode === 13) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (!searchTerm || searchTerm.trim() === "" || searchTerm === "*") {
+        alert("Please type something");
+        return;
+      }
       getSearchResults(e);
     }
   };
+
   return (
     <>
       <Head>
@@ -110,11 +115,13 @@ export default function Home() {
         <div className="flex mx-4">
           <div className="flex-auto pt-4 px-4">
             <div>
-              {searchResults.length > 0 && (
-                <p>
-                  Showing {count} {count === 1 ? "result" : "results"}
-                </p>
-              )}
+              {searchResults ? (
+                searchResults.length > 0 ? (
+                  <p>
+                    Showing {count} {count === 1 ? "result" : "results"}
+                  </p>
+                ) : null
+              ) : null}
             </div>
             <span className="flex items-center justify-center">
               {loading && <BeatLoader color="#444791" />}

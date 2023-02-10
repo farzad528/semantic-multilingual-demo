@@ -20,7 +20,7 @@ export default async function handler(
     count: "true",
     highlightPreTag: "<b>",
     highlightPostTag: "</b>",
-    // top: 5, 
+    top: 10, 
   };
 
   // TODO: add additional queryLanguages here
