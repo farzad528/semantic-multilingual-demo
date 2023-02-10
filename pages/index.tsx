@@ -105,55 +105,76 @@ export default function Home() {
         <div className="flex mx-4">
           <div className="flex-auto pt-4 px-4">
             <div>
-              <p>Showing {count} results</p>
-              <span className="flex items-center justify-center">
-                {loading && <BeatLoader color="#444791" />}
-              </span>
+              <p>
+                Showing {count} {count === 1 ? "result" : "results"}
+              </p>
             </div>
-            <div className="bg-white my-2 shadow-xl rounded-xl">
-              <div className="flex border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl">
-                {/* {!loading && <LightBulbIcon width={40} color="#4F52B2" />} */}
-
-                {searchResultsAnswers.map(
-                  (searchResultAnswer: SearchResultAnswer) => {
-                    return (
-                      <div
-                        key={searchResultAnswer.key}
-                        className="flex flex-col items-start justify-center w-full pl-2"
-                      >
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: searchResultAnswer.highlights,
-                          }}
-                        />
-                      </div>
-                    );
-                  }
+            <span className="flex items-center justify-center">
+              {loading && <BeatLoader color="#444791" />}
+            </span>
+            {!loading && (
+              <div>
+                {searchResultsAnswers ? (
+                  searchResultsAnswers.map(
+                    (searchResultAnswer: SearchResultAnswer) => {
+                      return (
+                        <div
+                          key={searchResultAnswer.key}
+                          className="flex flex-col items-start justify-center w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl"
+                        >
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: searchResultAnswer.highlights,
+                            }}
+                          />
+                        </div>
+                      );
+                    }
+                  )
+                ) : (
+                  <div className="mt-20 flex flex-col items-center">
+                    <Image
+                      alt="no results"
+                      src="/no-results.svg"
+                      className=""
+                      style={{ objectFit: "contain" }}
+                      width={80}
+                      height={30}
+                    />
+                    <p className="text-center text-2xl">
+                      No results returned
+                    </p>
+                    <p className="text-center">
+                      Try rephrasing or using ChatGPT
+                    </p>
+                  </div>
                 )}
               </div>
-            </div>
-            <div>
-              {searchResults.map((searchResult: SearchResult) => {
-                return (
-                  <div
-                    key={searchResult.id}
-                    className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
-                  >
-                    <p className="text-[#4F52B2] hover:underline hover:cursor-pointer text-lg">
-                      {searchResult.title_en}
-                    </p>
-                    <span className="text-sm">
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            searchResult["@search.captions"][0].highlights,
-                        }}
-                      />
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            )}
+            {!loading && (
+              <div>
+                {searchResults.map((searchResult: SearchResult) => {
+                  return (
+                    <div
+                      key={searchResult.id}
+                      className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
+                    >
+                      <p className="text-[#4F52B2] hover:underline hover:cursor-pointer text-lg">
+                        {searchResult.title_en}
+                      </p>
+                      <span className="text-sm">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              searchResult["@search.captions"][0].highlights,
+                          }}
+                        />
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </main>
