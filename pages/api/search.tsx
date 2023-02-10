@@ -24,7 +24,7 @@ export default async function handler(
   };
 
   // TODO: add additional queryLanguages here
-  // select statements are optional but recommended to limited to language fields that are used in your semanticConfiguration for a given language
+  // select statements are optional but recommended for performance optimization to only include fields that are used in your semanticConfiguration for a given language
   switch (queryLanguage) {
     case "de-de":
       payload.semanticConfiguration = "config_de";
