@@ -120,8 +120,13 @@ export default function Home() {
                       return (
                         <div
                           key={searchResultAnswer.key}
-                          className="flex flex-col items-start justify-center w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-xl"
+                          className="flex items-start justify-center w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-32 text-lg"
                         >
+                          <LightBulbIcon
+                            color="#444791"
+                            height={100}
+                            className="pr-2"
+                          />
                           <p
                             dangerouslySetInnerHTML={{
                               __html: searchResultAnswer.highlights,
@@ -141,9 +146,7 @@ export default function Home() {
                       width={80}
                       height={30}
                     />
-                    <p className="text-center text-2xl">
-                      No results returned
-                    </p>
+                    <p className="text-center text-2xl">No results returned</p>
                     <p className="text-center">
                       Try rephrasing or using ChatGPT
                     </p>
@@ -166,7 +169,11 @@ export default function Home() {
                         <p
                           dangerouslySetInnerHTML={{
                             __html:
-                              searchResult["@search.captions"][0].highlights,
+                              searchResult["@search.captions"][0].highlights
+                                .length === 0
+                                ? searchResult["@search.captions"][0].text
+                                : searchResult["@search.captions"][0]
+                                    .highlights,
                           }}
                         />
                       </span>

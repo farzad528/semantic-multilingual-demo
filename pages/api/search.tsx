@@ -20,9 +20,10 @@ export default async function handler(
     count: "true",
     highlightPreTag: "<b>",
     highlightPostTag: "</b>",
+    // top: 5, 
   };
 
-  // add additional queryLanguages
+  // TODO: add additional queryLanguages here
   // select statements are optional but recommended to limited to language fields that are used in your semanticConfiguration for a given language
   switch (queryLanguage) {
     case "de-de":
