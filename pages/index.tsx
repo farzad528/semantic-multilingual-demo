@@ -22,8 +22,12 @@ interface SearchResult {
   "@search.rerankerScore": number;
   "@search.captions": SearchCaptions[];
   id: string;
-  title_en: string;
-  content_en: string;
+  title_en?: string;
+  title_es?: string;
+  title_de?: string;
+  content_en?: string;
+  content_es?: string;
+  content_de?: string;
 }
 interface SearchResultAnswer {
   key: number;
@@ -163,7 +167,13 @@ export default function Home() {
                       className="flex flex-col items-start w-full border bg-white my-2 shadow-xl rounded-xl py-2 px-6 h-24"
                     >
                       <p className="text-[#4F52B2] hover:underline hover:cursor-pointer text-lg">
-                        {searchResult.title_en}
+                        {language === "es-es"
+                          ? searchResult.title_es
+                          : language === "en-us"
+                          ? searchResult.title_en
+                          : language === "de-de"
+                          ? searchResult.title_de
+                          : null}
                       </p>
                       <span className="text-sm">
                         <p
