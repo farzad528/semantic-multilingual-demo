@@ -21,6 +21,7 @@ interface SearchResult {
   "@search.score": number;
   "@search.rerankerScore": number;
   "@search.captions": SearchCaptions[];
+  // TODO: Add all your fields to your typescript interface
   id: string;
   title_en?: string;
   title_es?: string;
