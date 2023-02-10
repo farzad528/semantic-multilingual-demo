@@ -143,7 +143,10 @@ export default function Home() {
                           />
                           <p
                             dangerouslySetInnerHTML={{
-                              __html: searchResultAnswer.highlights,
+                              __html:
+                                searchResultAnswer.highlights.length === 0
+                                  ? searchResultAnswer.text
+                                  : searchResultAnswer.highlights,
                             }}
                           />
                         </div>
