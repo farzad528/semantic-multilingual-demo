@@ -10,26 +10,37 @@ export default async function handler(
 ) {
   const { search, queryLanguage } = req.body;
 
-  const payload = {
+  const payload: any = {
     search,
     queryType: "semantic",
     speller: "lexicon",
     queryLanguage,
     captions: "extractive",
     answers: "extractive",
-    semanticConfiguration:
-      queryLanguage === "de-de"
-        ? "config_de"
-        : queryLanguage === "es-es"
-        ? "config_es"
-        : queryLanguage === "en-us"
-        ? "config_en"
-        : "config_en",
-    select: "id, title_en, content_en",
     count: "true",
     highlightPreTag: "<b>",
     highlightPostTag: "</b>",
   };
+
+  // add additional queryLanguages
+  // select statements are optional but recommended to limited to language fields that are used in your semanticConfiguration for a given language
+  switch (queryLanguage) {
+    case "de-de":
+      payload.semanticConfiguration = "config_de";
+      payload.select = "id, title_de, content_de";
+      break;
+    case "es-es":
+      payload.semanticConfiguration = "config_es";
+      payload.select = "id, title_es, content_es";
+      break;
+    case "en-us":
+      payload.semanticConfiguration = "config_en";
+      payload.select = "id, title_en, content_en";
+      break;
+    default:
+      payload.semanticConfiguration = "config_en";
+      payload.select = "id, title_en, content_en";
+  }
 
   const response = await fetch(
     `https://${process.env.SERVICE_NAME}.search.windows.net/indexes/${process.env.INDEX_NAME}/docs/search?api-version=${process.env.API_VERSION}`,
